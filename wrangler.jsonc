@@ -15,6 +15,7 @@
     {
       "binding": "DB",
       "database_name": "avideo-v2",
+      "database_id": "e468b198-f4f8-4fdd-9eb2-76b0654923c4",
       "migrations_dir": "migrations"
     }
   ],

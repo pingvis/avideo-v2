@@ -10,6 +10,16 @@ export function SiteFooter() {
           Augustas Laurinavičius
           <br />
           Lietuva
+          <br />
+          <a href="mailto:info@avideo.lt">info@avideo.lt</a>
+          <br />
+          <a
+            href="https://instagram.com/augislauris"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            @augislauris
+          </a>
         </address>
         <div className="site-footer__bottom">
           <span>© {new Date().getUTCFullYear()} AVideo</span>

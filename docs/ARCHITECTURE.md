@@ -4,7 +4,7 @@
 
 AVideo v2 is an App Router application deployed to Cloudflare Workers. It was scaffolded with the current `create-vinext-app` Cloudflare path. `vinext` implements the Next.js API surface on Vite; Next.js 16 remains an explicit project dependency. `@cloudflare/vite-plugin` supplies the Workers runtime and `@vinext/cloudflare` supplies the CDN cache adapter. OpenNext and Cloudflare Pages are not used.
 
-`wrangler.jsonc` defines a D1 binding named `DB`. The binding intentionally has no committed production ID. Local scripts share an explicit `.wrangler/state` persistence path, including the built-Worker preview; production setup adds the non-secret D1 ID returned by `wrangler d1 create avideo-v2`. Secrets and account credentials remain outside the repository.
+`wrangler.jsonc` defines a D1 binding named `DB` targeting the new `avideo-v2` database. Its D1 resource ID is a non-secret Cloudflare identifier and is committed so Wrangler and Workers Builds resolve the same production resource. Local scripts share an explicit `.wrangler/state` persistence path, including the built-Worker preview. Secrets and account credentials remain outside the repository.
 
 ## Data flow
 
@@ -15,6 +15,8 @@ D1 DB binding -> lib/db/projects.ts -> Server Components -> presentational props
 
 D1 is the only project content source. There is no JSON fallback, browser API fetch, or duplicated hardcoded project collection. `lib/db/projects.ts` owns parameterized SQL, row mapping, validation, and server-side error logging. Query failures return empty/null results so pages retain visitor-safe states.
 
+The initial portfolio bootstrap in `seed/portfolio.sql` was mapped once from the legacy `avideo-videos` database. The application never reads that database at runtime. After bootstrap, edits happen in the new D1 database; the SQL file remains an auditable, repeatable initial dataset.
+
 The normalized model is:
 
 - `projects`: media identity, poster, display metadata, publication and ordering flags.
@@ -22,6 +24,8 @@ The normalized model is:
 - `project_tags`: many-to-many assignment with cascading foreign keys.
 
 Roles remain a pipe-separated text field for Phase 1. Tags are normalized because they are queried and filtered independently.
+
+Legacy categories map to `commercial`, `music`, `events`, `fpv`, `motion`, and `social`. Former `MISC` projects remain published but deliberately have no `misc` tag. Former `ZALIA` records are preserved as unpublished projects.
 
 ## Server and client boundaries
 

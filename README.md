@@ -18,7 +18,7 @@ npm run db:seed:local
 npm run dev
 ```
 
-Open `http://localhost:3000`. The development seed is explicitly non-production content.
+Open `http://localhost:3000`. The repeatable portfolio seed contains verified AVideo records imported from the legacy D1 database.
 
 ## Checks
 
@@ -34,15 +34,16 @@ npm run preview
 
 ## Cloudflare
 
-Create the production D1 database, add its returned non-secret ID to the existing `DB` binding in `wrangler.jsonc`, then run:
+The production `avideo-v2` D1 database is already bound as `DB` in `wrangler.jsonc`. Initialize it once, then deploy:
 
 ```bash
 npm run cf-typegen
 npm run db:migrate:remote
+npm run db:seed:remote
 npm run deploy
 ```
 
-Do not apply `seed/dev.sql` to production. Cloudflare credentials belong in Wrangler's login/token workflow, never in source.
+`seed/portfolio.sql` bootstraps the new canonical database; the legacy database is not queried by the application. Cloudflare credentials belong in Wrangler's login/token workflow, never in source.
 
 ## Documentation
 

@@ -18,17 +18,19 @@ test("showreel iframe is created only after explicit play", async ({ page }) => 
     "src",
     /^https:\/\/www\.youtube-nocookie\.com\/embed\/kM0p-mKQQaY\?/,
   );
-  await expect(iframe).toHaveAttribute("title", /AVideo Apparat v4/);
+  await expect(iframe).toHaveAttribute("title", /Sveiki atvykę į AVideo/);
 });
 
 test("D1-backed routes and 404 render", async ({ page }) => {
   await page.goto("/work");
   await expect(page.getByRole("heading", { name: "Darbai" })).toBeVisible();
-  await expect(page.getByText("AVideo Apparat v4", { exact: true })).toBeVisible();
+  await expect(page.getByText("BESTOGO In Slow Motion", { exact: true })).toBeVisible();
+  await expect(page.getByText("LIVE fx30 1359", { exact: true })).toHaveCount(0);
   await expect(page.locator("iframe")).toHaveCount(0);
 
   const posters = page.locator(".project-card img");
-  for (let index = 0; index < (await posters.count()); index += 1) {
+  await expect(posters).toHaveCount(35);
+  for (let index = 0; index < 6; index += 1) {
     const poster = posters.nth(index);
     await poster.scrollIntoViewIfNeeded();
     await expect
@@ -38,8 +40,10 @@ test("D1-backed routes and 404 render", async ({ page }) => {
       .toBeGreaterThan(0);
   }
 
-  await page.goto("/work/avideo-apparat-v4");
-  await expect(page.getByRole("heading", { name: "AVideo Apparat v4" })).toBeVisible();
+  await page.goto("/work/bestogo-in-slow-motion");
+  await expect(
+    page.getByRole("heading", { name: "BESTOGO In Slow Motion" }),
+  ).toBeVisible();
   await expect(page.locator("iframe")).toHaveCount(0);
 
   const response = await page.goto("/work/not-a-real-project");

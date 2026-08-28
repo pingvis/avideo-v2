@@ -537,6 +537,19 @@ select {
   line-height: 1.7;
 }
 
+.site-footer address a {
+  border-bottom: 1px solid var(--line);
+  transition:
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.site-footer address a:hover,
+.site-footer address a:focus-visible {
+  border-color: currentColor;
+  color: var(--foreground);
+}
+
 .site-footer__bottom {
   display: flex;
   align-items: end;

@@ -1,6 +1,6 @@
 # Content workflow
 
-D1 is the canonical project store. `seed/dev.sql` contains local integration examples only and must not be used as production portfolio content.
+D1 is the canonical project store. `seed/portfolio.sql` is the repeatable initial import of verified AVideo records; it is not read by the application at runtime.
 
 ## Local setup
 
@@ -17,16 +17,18 @@ npx wrangler d1 execute avideo-v2 --local --command "INSERT INTO projects (slug,
 
 ## Production setup
 
-Authenticate, create the database once, and put the returned non-secret `database_id` in the existing `DB` block in `wrangler.jsonc`:
+The new production `avideo-v2` database is already configured as `DB` in `wrangler.jsonc`. Authenticate and initialize it:
 
 ```bash
 npx wrangler login
-npx wrangler d1 create avideo-v2
 npm run cf-typegen
 npm run db:migrate:remote
+npm run db:seed:remote
 ```
 
 Use the same `wrangler d1 execute` command with `--remote` instead of `--local` to add or update production content. Do not run arbitrary SQL through a public endpoint; none exists.
+
+The initial import maps legacy categories to normalized tags. Legacy `MISC` projects intentionally receive no `misc` tag. Legacy `ZALIA` rows are retained with `published = 0`.
 
 ## Flags and ordering
 
